@@ -23,9 +23,10 @@ try:
     order_customer_df['quantity'] = order_customer_df['quantity'].fillna(0)
     # Renaming the column names
     order_customer_df = order_customer_df.rename(columns={'item_id': 'Item', 'customer_id': 'Customer', 'age': 'Age', 'quantity': 'Quantity'})
-    print(order_customer_df.head())
+    # Convering the age and quantity column values to integer type
+    order_customer_df['Customer'] = order_customer_df['Customer'].astype(int)
     # Adding the quantites for each unique items represented by item_id for the given customers
-    sales_report_df = order_customer_df.groupby(['Item', 'Customer']).agg({'Age':'first', 'Quantity': 'sum'})
+    sales_report_df = order_customer_df.groupby(['Customer', 'Item']).agg({'Age':'first', 'Quantity': 'sum'})
     # Taking quantities only greater than 0
     sales_report_df = sales_report_df[sales_report_df['Quantity']>0]
     # Convering the age and quantity column values to integer type

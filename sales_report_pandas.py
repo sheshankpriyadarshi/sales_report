@@ -21,13 +21,16 @@ try:
     order_customer_df = pd.merge(orders_df, filtered_customer_df, on='sales_id')
     # Replacing Nan values present in quantity column with 0
     order_customer_df['quantity'] = order_customer_df['quantity'].fillna(0)
+    # Renaming the column names
+    order_customer_df = order_customer_df.rename(columns={'item_id': 'Item', 'customer_id': 'Customer', 'age': 'Age', 'quantity': 'Quantity'})
+    print(order_customer_df.head())
     # Adding the quantites for each unique items represented by item_id for the given customers
-    sales_report_df = order_customer_df.groupby(['item_id', 'customer_id']).agg({'age':'first', 'quantity': 'sum'})
+    sales_report_df = order_customer_df.groupby(['Item', 'Customer']).agg({'Age':'first', 'Quantity': 'sum'})
     # Taking quantities only greater than 0
-    sales_report_df = sales_report_df[sales_report_df['quantity']>0]
+    sales_report_df = sales_report_df[sales_report_df['Quantity']>0]
     # Convering the age and quantity column values to integer type
-    sales_report_df['age'] = sales_report_df['age'].astype(int)
-    sales_report_df['quantity'] = sales_report_df['quantity'].astype(int)
+    sales_report_df['Age'] = sales_report_df['Age'].astype(int)
+    sales_report_df['Quantity'] = sales_report_df['Quantity'].astype(int)
     # Saving the final dataframe as csv
     sales_report_df.to_csv('pandas_result.csv', sep=';')
 except Exception as e:
